@@ -9,6 +9,7 @@ def handle_events():
     global move
     global movedirection
     global i
+    global mousex,mousey
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -21,6 +22,8 @@ def handle_events():
                 movedirection = 0
             i=0
             move = True
+        if event.type == SDL_MOUSEMOTION:
+            mousex, mousey = event.x, KPU_HEIGHT - 1 - event.y
 
 
 
@@ -33,7 +36,8 @@ def handle_events():
 open_canvas(KPU_WIDTH, KPU_HEIGHT)
 kpu_ground = load_image('KPU_GROUND.png')
 character = load_image('animation_sheet.png')
-hide
+hide_cursor()
+handArrow = load_image("hand_arrow.png")
 
 
 running = True
@@ -46,6 +50,8 @@ animation_state = 3
 movedirection = 1
 i = 1000
 move = False
+mousex = 0
+mousey = 0
 
 while running:
     if move:
@@ -56,18 +62,22 @@ while running:
             x = (1 - t) * x + t * to_x
             y = (1 - t) * y + t * to_y
             character.clip_draw(frame * 100, 100 * movedirection, 100, 100, x, y)
+            handArrow.draw(mousex + 20, mousey - 20)
             update_canvas()
             frame = (frame + 1) % 8
             handle_events()
             i += 1
+
             delay(0.05)
         move = False
     else:
         clear_canvas()
         kpu_ground.draw(1280 // 2, 1024 // 2)
         character.clip_draw(frame * 100, 100 * 1, 100, 100, x, y)
+        handArrow.draw(mousex + 20, mousey - 20)
         update_canvas()
         frame = (frame + 1) % 8
+
         delay(0.05)
     handle_events()
 
