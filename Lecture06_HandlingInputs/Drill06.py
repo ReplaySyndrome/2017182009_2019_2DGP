@@ -12,24 +12,29 @@ def handle_events():
             running = False
         elif event.type == SDL_KEYDOWN:
             if event.key == SDLK_RIGHT:
-                animation_state = 1
+                if xdir == 0:
+                    animation_state = 1
                 xdir += 1
             elif event.key == SDLK_LEFT:
-                animation_state = 0
+                if xdir == 0:
+                    animation_state = 0
                 xdir -= 1
             elif event.key == SDLK_UP:
                 ydir += 1
             elif event.key == SDLK_DOWN:
+
                 ydir -= 1
             elif event.key == SDLK_ESCAPE:
                 running = False
 
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_RIGHT:
-                animation_state = 3
+                if xdir != 0:
+                    animation_state = 3
                 xdir -= 1
             elif event.key == SDLK_LEFT:
-                animation_state = 2
+                if xdir != 0:
+                    animation_state = 2
                 xdir += 1
             elif event.key == SDLK_UP:
                 ydir -= 1
@@ -75,7 +80,7 @@ while running:
     if y < 0:
         y = 0
 
-    delay(0.01)
+
 
 close_canvas()
 
