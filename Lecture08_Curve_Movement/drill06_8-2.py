@@ -30,7 +30,16 @@ def character_move(p1,p2,p3,p4):
 
 
 while running:
-    character_move(points[-1],points[-0],points[1],points[2])
+    character_move(points[9],points[0],points[1],points[2])
+    character_move(points[0], points[1], points[2], points[3])
+    character_move(points[1], points[2], points[3], points[4])
+    character_move(points[2], points[3], points[4], points[5])
+    character_move(points[3],points[4], points[5], points[6])
+    character_move(points[4], points[5], points[6], points[7])
+    character_move(points[5],points[6], points[7], points[8])
+    character_move(points[6], points[7], points[8], points[9])
+    character_move(points[7], points[8], points[9], points[0])
+    character_move(points[8], points[9], points[0], points[1])
 
 
 
