@@ -16,6 +16,11 @@ size = 10
 points = [(random.randint(0, 1280), random.randint(0, 1024)) for i in range(size)]
 
 def character_move(p1,p2,p3,p4):
+    if p2[0] > p3[0]:
+        animation_direction = 0
+    else:
+        animation_direction = 1
+
     global frame
     for i in range(0, 100, 2):
         t = i / 100
@@ -23,7 +28,7 @@ def character_move(p1,p2,p3,p4):
         y = ((-t**3 + 2*t**2 - t)*p1[1] + (3*t**3 - 5*t**2 + 2)*p2[1] + (-3*t**3 + 4*t**2 + t)*p3[1] + (t**3 - t**2)*p4[1])/2
         clear_canvas()
         kpu_ground.draw(1280 // 2, 1024 // 2)
-        character.clip_draw(frame * 100, 100 * 1, 100, 100, x, y)
+        character.clip_draw(frame * 100, 100 * animation_direction, 100, 100, x, y)
         update_canvas()
         frame = (frame + 1) % 8
         delay(0.05)
