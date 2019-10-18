@@ -75,8 +75,8 @@ while running:
     for boy in team:
         if boy.x > 800:
             team.remove(boy)
-    print(len(team))
-    if len(team) == 0:
+    for ball in balls:
+        if ball.y < 0:
+            balls.remove(ball)
+    if len(team) == 0 and len(balls) == 0:
         break
-
-# finalization code
