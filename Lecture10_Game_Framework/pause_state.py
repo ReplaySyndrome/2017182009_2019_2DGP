@@ -6,13 +6,17 @@ import game_framework
 from pico2d import *
 
 import game_framework
-import title_state
+import main_state
+
 
 
 
 name = "MainState"
 
 image = None
+grass = None
+boy = None
+count = 0
 
 
 
@@ -45,13 +49,17 @@ class Boy:
 
 
 def enter():
-    global image
-    image = load_image('pause.png')
+    global pause_image,boy,grass
+    pause_image = load_image('pause.png')
+    grass = Grass()
+    boy = main_state.boy
 
 
 def exit():
-    global image
-    del(image)
+    global pause_image,boy,grass
+    del(pause_image)
+    del(boy)
+    del(grass)
 
 
 def pause():
@@ -67,13 +75,24 @@ def handle_events():
     for event in events:
         if event.type == SDL_KEYDOWN and event.key == SDLK_p:
             game_framework.pop_state()
+        elif event.type == SDL_QUIT:
+            game_framework.quit()
 
 
 def update():
-    pass
+    global count
+    count = count + 1
+    if count > 200:
+        count = 0
 
 
 def draw():
+    global count
+
     clear_canvas()
-    image.draw(400,300)
+    grass.draw()
+    boy.draw()
+    if count > 100:
+        pause_image.draw(400,300,50,50)
+
     update_canvas()
