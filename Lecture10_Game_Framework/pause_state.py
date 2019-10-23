@@ -1,21 +1,18 @@
-import random
-import json
-import os
+from pico2d import *
+
+import main_state
+import game_framework
 
 from pico2d import *
 
 import game_framework
 import title_state
-import pause_state
-
 
 
 
 name = "MainState"
 
-boy = None
-grass = None
-font = None
+image = None
 
 
 
@@ -48,15 +45,13 @@ class Boy:
 
 
 def enter():
-    global boy, grass
-    boy = Boy()
-    grass = Grass()
+    global image
+    image = load_image('pause.png')
 
 
 def exit():
-    global boy,grass
-    del(boy)
-    del(grass)
+    global image
+    del(image)
 
 
 def pause():
@@ -70,25 +65,15 @@ def resume():
 def handle_events():
     events = get_events()
     for event in events:
-        if event.type == SDL_QUIT:
-            game_framework.quit()
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            game_framework.change_state(title_state)
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_p:
-            game_framework.push_state(pause_state)
+        if event.type == SDL_KEYDOWN and event.key == SDLK_p:
+            game_framework.pop_state()
 
 
 def update():
-    boy.update()
+    pass
 
 
 def draw():
     clear_canvas()
-    grass.draw()
-    boy.draw()
+    image.draw(400,300)
     update_canvas()
-
-
-
-
-
