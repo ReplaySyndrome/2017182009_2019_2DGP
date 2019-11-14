@@ -19,7 +19,7 @@ class Bird:
             self.image = load_image('bird_animation.png')
 
         self.dir = 1
-        self.velocity = 80
+
         self.framePerSec = 10
         self.frameX = 0
         self.frameY = 2
@@ -32,6 +32,12 @@ class Bird:
         self.x = self.width/2
         self.y = 300
 
+        self.PIXEL_PER_METER = (self.width/10.0) #182 pixel 100cm
+        self.RUN_SPEED_KMPH = 30
+        self.RUN_SPEED_MPM = (self.RUN_SPEED_KMPH * 1000.0 / 60.0)
+        self.RUN_SPEED_MPS = (self.RUN_SPEED_MPM / 60.0)
+        self.RUN_SPEED_PPS = (self.RUN_SPEED_MPS * self.PIXEL_PER_METER)
+        self.velocity = self.RUN_SPEED_PPS
 
     def update(self):
         self.currentTime = time.time()
