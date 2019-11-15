@@ -19,7 +19,6 @@ class Movingground:
         elif self.x < 90:
             self.dir = 1
         self.x += self.dir *self.speed * game_framework.frame_time
-        print(game_framework.frame_time)
 
     def draw(self):
         self.image.draw(self.x,self.y)

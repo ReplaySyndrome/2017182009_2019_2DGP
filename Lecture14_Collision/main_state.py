@@ -80,6 +80,7 @@ def handle_events():
 
 
 def update():
+    global boy
     for game_object in game_world.all_objects():
         game_object.update()
 
@@ -97,6 +98,18 @@ def update():
             if ball.y - 20 - 19> moving_ground.y:
                 ball.stop()
                 ball.x += moving_ground.MoveBall()
+
+    if collide(boy, moving_ground):
+        boy.y = moving_ground.y  + 50
+        if boy.accY <= 0:
+            boy.accY = 0
+        boy.x += moving_ground.MoveBall()
+    elif  collide(boy, grass):
+        if boy.accY <= 0:
+            boy.accY = 0
+    else:
+        boy.y += game_framework.frame_time * boy.accY
+        boy.accY -= 2
 
 
 

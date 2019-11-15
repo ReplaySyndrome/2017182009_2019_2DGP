@@ -146,6 +146,7 @@ class Boy:
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
+        self. accY = 0
 
     def get_bb(self):
 
@@ -153,20 +154,25 @@ class Boy:
 
 
     def fire_ball(self):
-        ball = Ball(self.x, self.y, self.dir * RUN_SPEED_PPS * 10)
-        game_world.add_object(ball, 1)
+        print("HERE")
+        self.accY = 100
 
 
     def add_event(self, event):
         self.event_que.insert(0, event)
 
     def update(self):
+        print(self.accY)
+        self.y += self.accY * 30 * game_framework.frame_time
+        self.accY -= 4 * game_framework.frame_time
         self.cur_state.do(self)
         if len(self.event_que) > 0:
             event = self.event_que.pop()
             self.cur_state.exit(self, event)
             self.cur_state = next_state_table[self.cur_state][event]
             self.cur_state.enter(self, event)
+
+
 
     def draw(self):
         self.cur_state.draw(self)
