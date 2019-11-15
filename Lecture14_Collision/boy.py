@@ -148,8 +148,8 @@ class Boy:
         self.cur_state.enter(self, None)
 
     def get_bb(self):
-        # fill here
-        return 0, 0, 0, 0
+
+        return self.x - 25, self.y - 50, self.x + 25,self.y + 50
 
 
     def fire_ball(self):
@@ -171,7 +171,7 @@ class Boy:
     def draw(self):
         self.cur_state.draw(self)
         self.font.draw(self.x - 60, self.y + 50, '(Time: %3.2f)' % get_time(), (255, 255, 0))
-        #fill here
+        draw_rectangle(*self.get_bb())
 
 
     def handle_event(self, event):
