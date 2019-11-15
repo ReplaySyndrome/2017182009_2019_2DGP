@@ -99,11 +99,12 @@ def update():
                 ball.stop()
                 ball.x += moving_ground.MoveBall()
 
-    if collide(boy, moving_ground):
+    if collide(boy,moving_ground):
         boy.y = moving_ground.y  + 50
         if boy.accY <= 0:
             boy.accY = 0
         boy.x += moving_ground.MoveBall()
+        
     elif collide(boy, grass):
         if boy.accY <= 0:
             boy.accY = 0
