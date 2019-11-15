@@ -9,6 +9,7 @@ import game_world
 from boy import Boy
 from grass import Grass
 from ball import Ball,Bigball
+from MovingGround import Movingground
 
 name = "MainState"
 
@@ -16,6 +17,7 @@ boy = None
 grass = None
 balls = []
 big_balls = []
+moving_ground = None
 
 
 def collide(a, b):
@@ -46,6 +48,10 @@ def enter():
     global balls
     balls = [Ball() for i in range(10)] + [Bigball() for i in range(10)]
     game_world.add_objects(balls, 1)
+
+    global moving_ground
+    moving_ground = Movingground()
+    game_world.add_object(moving_ground,1)
 
 
 
