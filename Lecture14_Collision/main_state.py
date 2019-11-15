@@ -46,7 +46,7 @@ def enter():
     game_world.add_object(grass, 0)
 
     global balls
-    balls = [Ball() for i in range(10)] + [Bigball() for i in range(10)]
+    balls = [Ball() for i in range(10)] + [Bigball() for i in range(80)]
     game_world.add_objects(balls, 1)
 
     global moving_ground
@@ -87,9 +87,18 @@ def update():
         if collide(boy,ball):
             balls.remove(ball)
             game_world.remove_object(ball)
+
     for ball in balls:
         if collide(grass, ball):
             ball.stop()
+
+    for ball in balls:
+        if collide(ball,moving_ground):
+            if ball.y - 20 - 19> moving_ground.y:
+                ball.stop()
+                ball.x += moving_ground.MoveBall()
+
+
 
 
 def draw():

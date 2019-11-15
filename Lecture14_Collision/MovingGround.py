@@ -25,7 +25,8 @@ class Movingground:
         self.image.draw(self.x,self.y)
         draw_rectangle(*self.get_bb())
 
-
+    def MoveBall(self):
+        return self.dir *self.speed * game_framework.frame_time
 
     def get_bb(self):
         return self.x - 90, self.y - 20, self.x + 90, self.y + 20
