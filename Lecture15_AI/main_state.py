@@ -10,11 +10,37 @@ from boy import Boy
 from ground import Ground
 from zombie import Zombie
 
+class SmallBall:
+    def __init__(self):
+        self.image = load_image("ball21x21.png")
+        self.x = random.randint(0,1024)
+        self.y = random.randint(0, 1024)
+
+    def draw(self):
+        self.image.draw(self.x,self.y)
+
+    def update(self):
+        pass
+
+class BigBall:
+    def __init__(self):
+        self.image = load_image("ball41x41.png")
+        self.x = random.randint(0,1024)
+        self.y = random.randint(0, 1024)
+
+    def draw(self):
+        self.image.draw(self.x,self.y)
+
+    def update(self):
+        pass
+
 
 name = "MainState"
 
 boy = None
 zombie = None
+small_ball = None
+big_ball = None
 
 
 def collide(a, b):
@@ -46,6 +72,14 @@ def enter():
 
     ground = Ground()
     game_world.add_object(ground, 0)
+
+    global small_ball
+    small_ball = [SmallBall() for i in range(5)]
+    game_world.add_objects(small_ball,0)
+
+    global big_ball
+    big_ball = [BigBall() for i in range(5)]
+    game_world.add_objects(big_ball, 0)
 
 def exit():
     game_world.clear()
