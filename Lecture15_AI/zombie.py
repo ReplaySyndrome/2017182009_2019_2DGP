@@ -37,13 +37,18 @@ class Zombie:
             self.patrol_positions.append((p[0],1024-p[1]))
         self.patrol_order = 1
         self.target_x, self.target_y = None, None
-        self.x, self.y = self.patrol_positions[0]
+        self.x, self.y = random.randint(0,1024),random.randint(0,1080)
         self.load_images()
         self.dir = random.random()*2*math.pi # random moving direction
         self.speed = 0
         self.timer = 1.0 # change direction every 1 sec when wandering
         self.frame = 0
         self.build_behavior_tree()
+        self.font = load_font('ENCR10B.TTF', 16)
+        self.hp = 100
+
+    def add_hp(self,a):
+        self.hp += a
 
     def calculate_current_position(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
@@ -65,13 +70,55 @@ class Zombie:
     def find_player(self):
         boy = main_state.get_boy()
         distance = (boy.x - self.x) **2 + (boy.y - self.y)**2
-        if distance < (PIXEL_PER_METER* 5)**2:
+        if distance < (PIXEL_PER_METER* 10000)**2:
             self.dir = math.atan2(boy.y - self.y, boy.x - self.x)
+            self.speed = RUN_SPEED_PPS
+            self.calculate_current_position()
             return BehaviorTree.SUCCESS
         else:
             self.speed = 0
             return BehaviorTree.FAIL
         pass
+
+    def find_big_ball(self):
+
+        big_ball = main_state.get_big_ball()
+        if len(big_ball) > 0:
+            temp_distance = 10000
+            closer_index = 0
+
+            for i in range(len(big_ball)):
+                if temp_distance > (big_ball[i].x - self.x)**2 + (big_ball[i].y - self.y)**2:
+                    closer_index = i
+                temp_distance = (big_ball[i].x - self.x)**2 + (big_ball[i].y - self.y)**2
+
+            self.dir = math.atan2(big_ball[closer_index].y - self.y, big_ball[closer_index].x - self.x)
+            print("here")
+            self.speed = RUN_SPEED_PPS
+            self.calculate_current_position()
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.FAIL
+
+    def find_small_ball(self):
+        small_balls = main_state.get_small_ball()
+        if len(small_balls) > 0:
+            temp_distance = 10000
+            closer_index = 0
+
+            for i in range(len(small_balls)):
+                if temp_distance > (small_balls[i].x - self.x) ** 2 + (small_balls[i].y - self.y) ** 2:
+                    closer_index = i
+                temp_distance = (small_balls[i].x - self.x) ** 2 + (small_balls[i].y - self.y) ** 2
+
+            self.dir = math.atan2(small_balls[closer_index].y - self.y, small_balls[closer_index].x - self.x)
+            print("here")
+            self.speed = RUN_SPEED_PPS
+            self.calculate_current_position()
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.FAIL
+
 
     def move_to_player(self):
         self.speed = RUN_SPEED_PPS
@@ -96,15 +143,14 @@ class Zombie:
             return BehaviorTree.RUNNING
 
     def build_behavior_tree(self):
-        wander_node = LeafNode("Wander", self.wander)
-        find_player_node = LeafNode("Find Player", self.find_player)
-        move_to_player_node = LeafNode("Move to Player", self.move_to_player)
-        chase_node = SequenceNode("Chase")
-        chase_node.add_children(find_player_node, move_to_player_node)
-        wander_chase_node = SelectorNode("WanderChase")
-        wander_chase_node.add_children(chase_node, wander_node)
-        self.bt = BehaviorTree(wander_chase_node)
 
+
+        find_big_ball_node = LeafNode("Find_Big_Ball",self.find_big_ball)
+        find_small_ball_node = LeafNode("Find_Big_Ball", self.find_small_ball)
+        find_player_node = LeafNode("Find Player", self.find_player)
+        find_ball_boy_node = SelectorNode("FBB")
+        find_ball_boy_node.add_children(find_big_ball_node,find_small_ball_node,find_player_node)
+        self.bt = BehaviorTree(find_ball_boy_node)
 
 
 
@@ -118,6 +164,7 @@ class Zombie:
 
 
     def draw(self):
+        self.font.draw(self.x - 60, self.y + 50, str(self.hp), (255, 255, 0))
         if math.cos(self.dir) < 0:
             if self.speed == 0:
                 Zombie.images['Idle'][int(self.frame)].composite_draw(0, 'h', self.x, self.y, 100, 100)

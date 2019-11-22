@@ -22,6 +22,9 @@ class SmallBall:
     def update(self):
         pass
 
+    def get_bb(self):
+        return self.x - 7,self.y-7,self.x+7,self.y+7
+
 class BigBall:
     def __init__(self):
         self.image = load_image("ball41x41.png")
@@ -33,6 +36,9 @@ class BigBall:
 
     def update(self):
         pass
+
+    def get_bb(self):
+        return self.x - 15,self.y-15,self.x+15,self.y+15
 
 
 name = "MainState"
@@ -60,6 +66,11 @@ def collide(a, b):
 def get_boy():
     return boy
 
+def get_small_ball():
+    return small_ball
+
+def get_big_ball():
+    return big_ball
 
 def enter():
     global boy
@@ -104,8 +115,32 @@ def handle_events():
 
 
 def update():
+    if collide(boy,zombie):
+        if zombie.hp == 850:
+            game_framework.pop_state()
+        else:
+            game_world.remove_object(zombie)
+
     for game_object in game_world.all_objects():
         game_object.update()
+
+    for b in big_ball:
+        if collide(zombie,b):
+            game_world.remove_object(b)
+            big_ball.remove(b)
+            zombie.add_hp(100)
+
+    for i in small_ball:
+        if collide(zombie, i):
+
+            game_world.remove_object(i)
+            small_ball.remove(i)
+            zombie.add_hp(50)
+
+
+
+
+
 
 
 def draw():
