@@ -104,7 +104,7 @@ def update():
         if boy.accY <= 0:
             boy.accY = 0
         boy.x += moving_ground.MoveBall()
-        
+
     elif collide(boy, grass):
         if boy.accY <= 0:
             boy.accY = 0
